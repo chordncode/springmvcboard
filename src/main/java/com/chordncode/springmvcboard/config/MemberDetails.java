@@ -12,15 +12,15 @@ import com.chordncode.springmvcboard.data.dto.MemberDto;
 import lombok.Getter;
 
 @Getter
-public class MemberAuth extends User {
+public class MemberDetails extends User {
 
     private MemberDto memDto;
 
-    public MemberAuth(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public MemberDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
     }
 
-    public MemberAuth(MemberDto memDto){
+    public MemberDetails(MemberDto memDto){
 
         super(memDto.getMemId(), memDto.getMemPw(),
               memDto.getAuthList().stream()

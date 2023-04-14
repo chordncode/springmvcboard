@@ -20,7 +20,7 @@ public class MemberDetailsService implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         MemberDto memDto = memberService.selectMemberForDetails(username);
-        return memDto == null ? null : new MemberAuth(memDto);
+        return memDto == null ? null : new MemberDetails(memDto);
     }
     
 }

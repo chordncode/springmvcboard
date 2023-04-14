@@ -1,5 +1,8 @@
 package com.chordncode.springmvcboard.member.controller;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,14 +20,27 @@ public class MemberController {
     @Autowired
     private MemberService memService;
     
-    @GetMapping(value = {"", "/login"})
-    public String login(){
-        return "login";
+    @GetMapping("")
+    public String home(){
+        return "redirect:/board";
+    }
+
+    @GetMapping("/login")
+    public String login(HttpServletRequest request, Model model){
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null && cookies.length > 0){
+            for(Cookie cookie : cookies){
+                if(cookie.getName().equals("rememberId")){
+                    model.addAttribute("rememberId", cookie.getValue());
+                }
+            }
+        }
+        return "member/login";
     }
 
     @GetMapping("/signup")
     public String signup(){
-        return "signup";
+        return "member/signup";
     }
 
     @PostMapping("/signup")
@@ -39,8 +55,7 @@ public class MemberController {
 
         if(insertedMemDto == null) {
             model.addAttribute("msg", "에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
-            model.addAttribute("loc", "/signup");
-            return "alert";
+            return "alertBack";
         }
         return "redirect:/login";
     }
