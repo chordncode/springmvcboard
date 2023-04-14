@@ -11,7 +11,7 @@
 <body>
     <div class="container">
         <div class="d-flex justify-content-center align-items-center vh-100">
-            <div class="card border-0 shadow-lg rounded-2 w-50 h-50">
+            <div class="card border-0 shadow-lg rounded-2 w-50">
                 <div class="card-header">
                     <h2>회원가입</h2>
                 </div>

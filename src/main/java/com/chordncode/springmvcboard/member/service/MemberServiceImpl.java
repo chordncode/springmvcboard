@@ -26,4 +26,10 @@ public class MemberServiceImpl implements MemberService {
         return new MemberDto(insertedMember);
     }
 
+    @Override
+    public MemberDto selectMemberForDetails(String memId) {
+        Member member = memRepo.findById(memId).orElse(null);
+        return new MemberDto(member);
+    }
+
 }

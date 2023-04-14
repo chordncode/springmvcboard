@@ -17,12 +17,7 @@ public class MemberController {
     @Autowired
     private MemberService memService;
     
-    @GetMapping("")
-    public String home(){
-        return "home";
-    }
-
-    @GetMapping("/login")
+    @GetMapping(value = {"", "/login"})
     public String login(){
         return "login";
     }
