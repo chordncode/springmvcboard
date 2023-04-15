@@ -37,7 +37,7 @@ public class MemberLoginSuccessHandler implements AuthenticationSuccessHandler  
             }
         }
 
-        response.sendRedirect("/board");
+        response.sendRedirect("/boards");
     }
 
 }

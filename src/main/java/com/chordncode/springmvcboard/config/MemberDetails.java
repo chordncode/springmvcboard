@@ -10,8 +10,10 @@ import org.springframework.security.core.userdetails.User;
 import com.chordncode.springmvcboard.data.dto.MemberDto;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class MemberDetails extends User {
 
     private MemberDto memDto;

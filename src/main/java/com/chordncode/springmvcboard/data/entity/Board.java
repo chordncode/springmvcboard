@@ -8,10 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.chordncode.springmvcboard.data.dto.BoardDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,11 +33,15 @@ public class Board {
     @Column(name = "board_title", nullable = false)
     private String boardTitle;
 
+    @Lob
     @Column(name = "board_content", nullable = false)
     private String boardContent;
 
     @Column(name = "mem_id", nullable = false)
     private String memId;
+
+    @Column(name = "mem_nick", nullable = false)
+    private String memNick;
     
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

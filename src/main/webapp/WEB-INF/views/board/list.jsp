@@ -7,6 +7,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+    <style>
+        .boardRow {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <%@ include file="/WEB-INF/views/navbar.jsp" %>
@@ -27,14 +32,15 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <c:set var="boardList" value="${requestScope.boardInfo.contentList}" />
                             <c:choose>
-                                <c:when test="${requestScope.boardList != null and requestScope.boardList.size != 0}">
-                                    <c:forEach items="${requestScope.boardList}" var="board">
-                                        <tr>
-                                            <td>${board.boardId}</td>
-                                            <td>${board.boardTitle}</td>
-                                            <td>${board.memId}</td>
-                                            <td>${board.createdAt}</td>
+                                <c:when test="${boardList != null and boardList.size() > 0}">
+                                    <c:forEach var="board" items="${boardList}">
+                                        <tr class="boardRow">
+                                            <td style="width: 10%;">${board.boardId}</td>
+                                            <td style="width: 50%;">${board.boardTitle}</td>
+                                            <td style="width: 10%;">${board.memNick}</td>
+                                            <td style="width: 30%;">${board.createdAt}</td>
                                         </tr>
                                     </c:forEach>
                                 </c:when>
@@ -48,29 +54,42 @@
                     </table>
                     <div class="d-flex justify-content-center align-items-center">
                         <ul class="pagination">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
+                            <c:if test="${requestScope.boardInfo.startPage > 1}">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:forEach var="page" begin="${requestScope.boardInfo.startPage}" end="${requestScope.boardInfo.endPage}">
+                                <li class="page-item <c:if test='${requestScope.boardInfo.currentPage == page}'>active</c:if>">
+                                    <a class="page-link" href="/boards/pages/${page}">${page}</a>
+                                </li>
+                            </c:forEach>
+                            <c:if test="${requestScope.boardInfo.endPage != requestScope.boardInfo.totalPages}">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </c:if>
                         </ul>
                     </div>
                 </div>
                 <div class="card-footer text-end">
-                    <a href="/board/insert" class="btn btn-primary" role="button">글쓰기</a>
+                    <a href="/boards/insert" class="btn btn-primary" role="button">글쓰기</a>
                 </div>
             </div>
         </div>
     </div>
 </body>
 <script>
+    const boardRows = document.querySelectorAll('.boardRow');
+    boardRows.forEach(function(row){
+        row.onclick = function(){
+            const boardId = this.querySelectorAll('td')[0].textContent;
+            location.href = '/boards/' + boardId;
+        }
+    });
 </script>
 </html>

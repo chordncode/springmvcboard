@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>글쓰기</title>
+    <title>글수정</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
@@ -22,14 +22,15 @@
     <div class="container">
         <div class="d-flex justify-content-center align-items-center" style="height: 700px;">
             <div class="card border-0 shadow-lg rounded-2 w-75">
-                <form action="/boards/insert" method="post">
+                <form action="/boards/updatePost" method="post">
                     <div class="card-header">
-                        <h2>글쓰기</h2>
+                        <h2>글수정</h2>
                     </div>
                     <div class="card-body">
+                        <input type="hidden" name="boardId" value="${board.boardId}" />
                         <div class="form-group">
                             <label for="boardTitle"><h5>제목</h5></label>
-                            <input type="text" class="form-control" id="boardTitle" name="boardTitle" />
+                            <input type="text" class="form-control" id="boardTitle" name="boardTitle" value="${board.boardTitle}" />
                         </div>
                         <hr />
                         <div class="form-group">
@@ -40,7 +41,7 @@
                     </div>
                     <div class="card-footer text-end">
                         <button type="submit" class="btn btn-primary">등록</button>
-                        <a href="/boards" class="btn btn-secondary" role="button">취소</a>
+                        <a href="javascript:history.back();" class="btn btn-secondary" role="button">취소</a>
                     </div>
                 </form>
             </div>
@@ -54,5 +55,6 @@
     $('#boardContent').summernote({
         height: 200
     });
+    $('#boardContent').summernote('code', '${board.boardContent}');
 </script>
 </html>

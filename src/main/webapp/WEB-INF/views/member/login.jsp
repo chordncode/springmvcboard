@@ -32,9 +32,10 @@
                             <label for="rememberId" class="form-check-label">아이디 저장</label>
                         </div>
                         <div class="text-center mb-3">
-                            <a href="#" class="link-secondary">아이디 찾기</a>
-                            <a href="#" class="link-secondary ms-2">비밀번호 찾기</a>
+                            <a href="/findId" class="link-secondary">아이디 찾기</a>
+                            <a href="/findPw" class="link-secondary ms-2">비밀번호 찾기</a>
                         </div>
+                        <span class="my-2 text-danger">${requestScope.errMsg}</span>
                         <div class="my-4 mx-4 d-grid">
                             <button type="submit" class="btn btn-primary">로그인</button>
                         </div>
