@@ -2,9 +2,7 @@ package com.chordncode.springmvcboard.data.util;
 
 import java.util.List;
 
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class ArticleInfo <T> {
