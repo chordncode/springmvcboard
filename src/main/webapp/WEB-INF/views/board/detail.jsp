@@ -8,9 +8,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
     <style>
         .infoRow{
             align-items: center;
+        }
+        .note-editable>*{
+            margin: 0;
+        }
+        .commentDeleteBtn{
+            cursor: pointer;
         }
     </style>
 </head>
@@ -70,6 +80,47 @@
                             ${board.boardContent}
                         </div>
                     </div>
+                    <hr class="mb-0" />
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <h4 class="col-md-2 text-center">댓글</h4>
+                        <div class="col-md">
+                            <textarea id="comment"></textarea>
+                        </div>
+                        <div class="col-md-auto">
+                            <button type="button" class="btn btn-primary" style="width: 100px;">등록</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="offset-md-2 col-md">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="commentRow row mb-2">
+                        <div class="commentBox offset-md-2 col-md">
+                            <div class="commentHeader mb-2">
+                                <h5 class="d-inline">이상혁</h5>
+                                <p class="d-inline text-muted ms-2"><small>2023-04-16 22:51:31</small></p>
+                                <span class="text-danger commentDeleteBtn">&times;</span>
+                            </div>
+                            <div class="commentBody">
+                                <p>감사합니다 ㅎㅎ</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="commentRow row mb-2">
+                        <div class="commentBox offset-md-2 col-md">
+                            <div class="commentHeader mb-2">
+                                <h5 class="d-inline">강감찬</h5>
+                                <p class="d-inline text-muted ms-2"><small>2023-04-16 22:51:46</small></p>
+                                <span class="text-danger commentDeleteBtn">&times;</span>
+                            </div>
+                            <div class="commentBody">
+                                <p>저두 동감입니다~~</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -90,5 +141,10 @@
             deleteForm.submit();
         }
     }
+
+    $('#comment').summernote({
+        height: 120,
+        toolbar: []
+    });
 </script>
 </html>
