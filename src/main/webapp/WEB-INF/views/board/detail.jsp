@@ -27,7 +27,7 @@
 <body>
     <%@ include file="/WEB-INF/views/navbar.jsp" %>
     <div class="container">
-        <div class="d-flex justify-content-center align-items-center" style="height: 700px;">
+        <div class="d-flex justify-content-center align-items-center my-4" style="min-height: 700px;">
             <div class="card border-0 shadow-lg rounded-2 w-75">
                 <div class="card-header">
                     <div class="navbar p-0">
@@ -83,68 +83,107 @@
                     <hr class="mb-0" />
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <h4 class="col-md-2 text-center">댓글</h4>
-                        <div class="col-md">
-                            <textarea id="comment"></textarea>
+                    <form name="insertCommentForm" action="/boards/insertComment" method="post" onsubmit="return insertComment();">
+                        <div class="row">
+                            <h4 class="col-md-2 text-center">댓글</h4>
+                            <div class="col-md">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                <input type="hidden" name="boardId" value="${board.boardId}" />
+                                <textarea id="commentContent" name="commentContent"></textarea>
+                            </div>
+                            <div class="col-md-auto">
+                                <button type="submit" class="btn btn-primary" style="width: 100px;">등록</button>
+                            </div>
                         </div>
-                        <div class="col-md-auto">
-                            <button type="button" class="btn btn-primary" style="width: 100px;">등록</button>
-                        </div>
-                    </div>
+                    </form>
                     <div class="row">
                         <div class="offset-md-2 col-md">
                             <hr />
                         </div>
                     </div>
-                    <div class="commentRow row mb-2">
-                        <div class="commentBox offset-md-2 col-md">
-                            <div class="commentHeader mb-2">
-                                <h5 class="d-inline">이상혁</h5>
-                                <p class="d-inline text-muted ms-2"><small>2023-04-16 22:51:31</small></p>
-                                <span class="text-danger commentDeleteBtn">&times;</span>
+                    <c:choose>
+                        <c:when test="${commentList != null and commentList.size() > 0}">
+                            <c:forEach var="comment" items="${commentList}">
+                                <div class="commentRow row mb-2">
+                                    <div class="commentBox offset-md-2 col-md">
+                                        <div class="commentHeader mb-2">
+                                            <h5 class="d-inline">${comment.memNick}</h5>
+                                            <p class="d-inline text-muted ms-2"><small>${comment.createdAt}</small></p>
+                                            <c:if test="${comment.memId == memDet.memDto.memId}">
+                                                <span class="text-danger commentDeleteBtn">&times;</span>
+                                                <form action="/boards/deleteComment" method="post" class="deleteCommentForm">
+                                                    <input type="hidden" name="boardId" value="${board.boardId}" />
+                                                    <input type="hidden" name="commentId" value="${comment.commentId}" />
+                                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                                </form>
+                                            </c:if>
+                                        </div>
+                                        <div class="commentBody">
+                                            ${comment.commentContent}
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="commentRow row mb-2">
+                                <div class="commentBox offset-md-2 col-md text-center">
+                                    <h5 class="my-4">작성된 댓글이 없습니다.</h5>
+                                </div>
                             </div>
-                            <div class="commentBody">
-                                <p>감사합니다 ㅎㅎ</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="commentRow row mb-2">
-                        <div class="commentBox offset-md-2 col-md">
-                            <div class="commentHeader mb-2">
-                                <h5 class="d-inline">강감찬</h5>
-                                <p class="d-inline text-muted ms-2"><small>2023-04-16 22:51:46</small></p>
-                                <span class="text-danger commentDeleteBtn">&times;</span>
-                            </div>
-                            <div class="commentBody">
-                                <p>저두 동감입니다~~</p>
-                            </div>
-                        </div>
-                    </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>
     </div>
 </body>
 <script>
+    const commentContent = document.querySelector('#commentContent');
+
     const updateForm = document.updateForm;
     const deleteForm = document.deleteForm;
+    const insertCommentForm = document.insertCommentForm;
+
     const updateBtn = document.querySelector('#updateBtn');
     const deleteBtn = document.querySelector('#deleteBtn');
+    const commentDeleteBtn = document.querySelectorAll('.commentDeleteBtn');
 
-    updateBtn.onclick = function() {
-        updateForm.submit();
-    }
-
-    deleteBtn.onclick = function() {
-        if(confirm('게시글을 삭제하시겠습니까?')){
-            deleteForm.submit();
+    if(updateBtn != null){
+        updateBtn.onclick = function() {
+            updateForm.submit();
         }
     }
 
-    $('#comment').summernote({
+    if(deleteBtn != null){
+        deleteBtn.onclick = function() {
+            if(confirm('게시글을 삭제하시겠습니까?')){
+                deleteForm.submit();
+            }
+        }
+    }
+
+    $('#commentContent').summernote({
         height: 120,
         toolbar: []
     });
+
+    function insertComment(){
+        const commentContentValue = commentContent.value.trim();
+        if(commentContentValue == ''){
+            alert('댓글 내용을 작성해주세요.');
+            return false;
+        }
+
+        return true;
+    }
+
+    commentDeleteBtn.forEach(deleteBtn => {
+        deleteBtn.onclick = function(){
+            if(confirm('댓글을 삭제하시겠습니까?')){
+                this.nextSibling.nextSibling.submit();
+            }
+        }
+    })
 </script>
 </html>

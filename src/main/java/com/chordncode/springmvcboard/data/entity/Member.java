@@ -54,4 +54,8 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     List<Board> boardList;
+
+    @OneToMany(mappedBy = "member")
+    List<Comment> commentList;
+
 }

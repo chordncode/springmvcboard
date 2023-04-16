@@ -1,5 +1,7 @@
 package com.chordncode.springmvcboard.board.controller;
 
+import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.chordncode.springmvcboard.board.service.BoardService;
 import com.chordncode.springmvcboard.data.dto.BoardDto;
+import com.chordncode.springmvcboard.data.dto.CommentDto;
 import com.chordncode.springmvcboard.data.util.ArticleInfo;
 
 @Controller
@@ -51,13 +54,16 @@ public class BoardController {
     @GetMapping("/{boardId}")
     public String detailBoard(@PathVariable Long boardId, Model model){
         BoardDto boardDto = null;
+        List<CommentDto> commentList = null;
         try {
             boardDto = boardService.selectBoard(boardId);
+            commentList = boardService.listComment(boardId);
         } catch (Exception e) {
             model.addAttribute("msg", "게시글이 존재하지 않습니다.");
             return "alertBack";
         }
         model.addAttribute("board", boardDto);
+        model.addAttribute("commentList", commentList);
         return "board/detail";
     }
 
@@ -100,5 +106,33 @@ public class BoardController {
         }
         return "redirect:/boards";
     }
+
+    @PostMapping("/insertComment")
+    public String insertComment(@ModelAttribute CommentDto commentDto, Model model){
+        CommentDto insertCommentDto = null;
+        try {
+            insertCommentDto = boardService.insertComment(commentDto);
+        } catch (ResponseStatusException e) {
+            model.addAttribute("msg", "게시글이 존재하지 않습니다.");
+            model.addAttribute("loc", "/boards");
+            return "alertLoc";
+        } catch (Exception e) {
+            model.addAttribute("msg", "에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
+            return "alertBack";
+        }
+        return "redirect:/boards/" + insertCommentDto.getBoardId();
+    }
     
+    @PostMapping("/deleteComment")
+    public String deleteComment(@ModelAttribute CommentDto commentDto, Model model) {
+        try {
+            boardService.deleteComment(commentDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("msg", "에러가 발생했습니다. 잠시 후 다시 시도해주세요.");
+            return "alertBack";
+        }
+        return "redirect:/boards/" + commentDto.getBoardId();
+    }
+
 }
